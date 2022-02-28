@@ -1,3 +1,27 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+
+.invo-label {
+    @apply uppercase text-sm text-gray-600 mb-2 cursor-pointer block
+}
+
+.invo-input {
+    @apply border border-gray-400 w-full px-4 py-2 block
+}
+.btn {
+    @apply bg-gray-800 text-white px-6 py-2 rounded inline-block text-center
+}
+.required-text{
+    @apply text-red-700
+}
+.formLabel{
+    @apply cursor-pointer block text-sm mb-1
+}
+.formInput{
+    @apply w-full rounded-sm
+}
+.ck-editor__editable_inline {
+    min-height: 300px;
+}

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TaskFactory extends Factory
@@ -13,8 +15,13 @@ class TaskFactory extends Factory
      */
     public function definition()
     {
+        $price = [300,400,500,1000];
         return [
-            //
+            'name' => $this->faker->sentence(),
+            'description' => $this->faker->sentences(rand(2,5),true),
+            'price' => $price[rand(0,3)],
+            'client_id' => Client::all()->random()->id,
+            'user_id' => User::all()->random()->id
         ];
     }
 }

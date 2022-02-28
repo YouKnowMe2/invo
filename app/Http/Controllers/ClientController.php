@@ -14,7 +14,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        $clients = Client::latest()->paginate(20);
+        return view('client.index',['clients' => $clients]);
     }
 
     /**
@@ -24,7 +25,8 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        $countries = Client::all();
+        return view('client.create',['countries' => $countries]);
     }
 
     /**
@@ -35,7 +37,39 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'  => ['required', 'max:255', 'string'],
+            'username'  => ['required', 'max:255', 'string'],
+            'email'  => ['required', 'max:255', 'string', 'email'],
+            'phone'  => ['max:255', 'string'],
+            'country'  => ['max:255', 'string'],
+            'status'  => ['max:255', 'string'],
+            'thumbnail'  => ['image'],
+
+
+        ]);
+        if(!empty($request->file('thumbnail')) ){
+            $image = time(). '-'.$request->file('thumbnail')->getClientOriginalName();
+            $request->file('thumbnail')->storeAs('public/uploads',$image);
+        }
+
+
+
+
+        Client::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email'  => $request->email,
+            'phone' => $request->phone,
+            'country' => $request->country,
+            'status' => $request->status,
+            'thumbnail' => $image,
+
+
+        ]);
+
+
+        return redirect()->route('client.index');
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Client;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -20,5 +22,8 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123'),
             'thumbnail' => 'https://picsum.photos/300'
         ]);
+
+        Client::factory(50)->create();
+        Task::factory(50)->create();
     }
 }
