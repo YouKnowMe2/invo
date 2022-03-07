@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Add New Client') }}
+                {{ __('Update Existing Client') }}
             </h2>
             <a href="{{ route('client.index') }}" class="bg-gray-800 px-4 py-2 text-white">Back</a>
         </div>
@@ -13,14 +13,14 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                    <form action="{{ route('client.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
+                    <form action="{{ route('client.update',$client->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf @method('PUT')
 
                         <div class="mt-6 flex">
 
                             <div class="flex-1 mr-4">
                                 <label for="name" class="formLabel">Name</label>
-                                <input type="text" name="name" id="name" class="formInput" required value="{{ old('name') }}">
+                                <input type="text" name="name" id="name" class="formInput" required value="{{ $client->name }}">
 
                                 @error('name')
                                 <p class="text-red-700 text-sm">{{ $message }}</p>
@@ -30,27 +30,24 @@
                             <div class="flex-1 ml-4">
                                 <label for="username" class="formLabel">Username</label>
                                 <input type="text" name="username" id="username" required class="formInput"
-                                       value="{{ old('username') }}">
+                                       value="{{ $client->username }}">
                                 @error('username')
                                 <p class="text-red-700 text-sm">{{ $message }}</p>
                                 @enderror
                             </div>
 
                         </div>
-
-
-
                         <div class="mt-6 flex">
                             <div class="flex-1 mr-4">
                                 <label for="email" class="formLabel">Email</label>
-                                <input type="text" name="email" id="email" required class="formInput" value="{{ old('email') }}">
+                                <input type="text" name="email" id="email" required class="formInput" value="{{ $client->email }}">
                                 @error('email')
                                 <p class="text-red-700 text-sm">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="flex-1 ml-4">
                                 <label for="phone" class="formLabel">Phone</label>
-                                <input type="text" name="phone" id="phone" required class="formInput" value="{{ old('phone') }}">
+                                <input type="text" name="phone" id="phone" required class="formInput" value="{{ $client->phone  }}">
                                 @error('phone')
                                 <p class="text-red-700 text-sm">{{ $message }}</p>
                                 @enderror
@@ -65,7 +62,7 @@
                                 <select name="country" id="country" class="formInput">
                                     <option value="none">Select country</option>
                                     @foreach ($countries as $country)
-                                        <option value="{{ $country }}" {{ old('country') == $country ? 'selected' :'' }}>{{ $country }}</option>
+                                        <option value="{{ $country }}" {{ $client->country == $country ? 'selected' :'' }}>{{ $country }}</option>
                                     @endforeach
                                 </select>
 
@@ -73,23 +70,21 @@
                                 @error('country')
                                 <p class="text-red-700 text-sm">{{ $message }}</p>
                                 @enderror
-                            </div>
-                            <div class="flex-1 mx-5">
-                                <label for="thumbnail"
-                                       class="formLabel border-2 rounded-md border-dashed border-emerald-700 py-2 my-6 text-center">Click
-                                    to upload image</label>
-                                <input type="file" name="thumbnail" id="thumbnail" class="formInput " required>
 
-                                @error('thumbnail')
+
+                                @error('country')
                                 <p class="text-red-700 text-sm">{{ $message }}</p>
                                 @enderror
-
                             </div>
+
+
+
+
                             <div class="flex-1">
                                 <label for="status" class="formLabel">Status</label>
                                 <select name="status" id="status" class="formInput">
-                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }} >Active</option>
-                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                    <option value="active" {{ $client->status == 'active' ? 'selected' : '' }} >Active</option>
+                                    <option value="inactive" {{ $client->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
                                 </select>
 
                                 @error('status')
@@ -98,11 +93,34 @@
 
 
                             </div>
+                            @php
+                                function getImageUrl($image){
+                                        if(str_starts_with($image,'http')){
+                                            return $image;
+                                        }else{
+                                            return '/storage/uploads/' . $image;
+                                        }
+                                }
+                            @endphp
+                            <div class="flex-1 mx-5 relative">
+                                <label for="thumbnail"
+                                       class="formLabel border-2 rounded-md border-dashed border-emerald-700 py-2 my-6 text-center">Click
+                                    to upload image</label>
+                                <input type="file" name="thumbnail" id="thumbnail" class="formInput ">
+                                <div class="w-full text-center absolute"><img  width="80" class="mx-auto rounded-2xl" src="{{getImageUrl($client->thumbnail)}}" alt=""></div>
+
+
+                                @error('thumbnail')
+                                <p class="text-red-700 text-sm">{{ $message }}</p>
+                                @enderror
+
+
+                            </div>
                         </div>
 
+
                         <div class="mt-6">
-                            <button type="submit"
-                                    class="px-4 py-2 text-base uppercase bg-emerald-800 text-white rounded-md">Create</button>
+                            <button type="submit" class="px-4 py-2 text-base uppercase bg-emerald-800 text-white rounded-md">Update</button>
                         </div>
 
                     </form>

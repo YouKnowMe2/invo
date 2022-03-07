@@ -20,6 +20,7 @@ class CreateClientsTable extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('country')->nullable();
+            $table->foreignId('user_id');
             $table->string('thumbnail')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamps();
